@@ -21,3 +21,16 @@ test('terminal quoting contains substitutions and apostrophes as literals',()=>{
 test('unknown metadata cannot mark a project as built or change the command',()=>{
  const p=createPack({...sample,status:'ready',command:'run arbitrary code'});assert.equal(p.project.status,undefined);assert.equal(p.project.command,undefined);assert.match(p.review,/prepared/);
 });
+
+// A static preview server may insert its live-reload script before the first body end tag.
+test('inline source survives HTML parsing and live-reload insertion', async()=>{
+ const {inlineSource}=await import('./inline-source.mjs');
+ const {runInNewContext}=await import('node:vm');
+ const original='`<html><head></head><body>example</body></html><script></script>`';
+ const safe=inlineSource(original);
+ assert.doesNotMatch(safe, /<\/(?:script|body|head|html)/i);
+ assert.equal(runInNewContext(safe),runInNewContext(original));
+ const document='<body><script>'+safe+'</script></body>';
+ const injected=document.replace('</body>','<script>liveReload()</script></body>');
+ assert.ok(injected.indexOf('liveReload()')>injected.indexOf('</script>'));
+});

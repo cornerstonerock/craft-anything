@@ -3179,4 +3179,4 @@ User-authorized fork work, independent of the upstream milestone ordering.
 - [ ] Add a native engine adapter for starting and polling builds, then verify one live paid-model build before enabling a Generate action
 - [ ] Add private hosting, authentication, GHL delivery and cost tracking after the internal pilot
 
-- [ ] Repair standalone preview delivery and verify the browser workflow — claimed: Codex, branch bugfix/lead-pleaser-preview
+- [x] Repair standalone preview delivery and verify the browser workflow — claimed: Codex, branch bugfix/lead-pleaser-preview

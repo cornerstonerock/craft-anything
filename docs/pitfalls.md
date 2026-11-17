@@ -1285,3 +1285,11 @@ exclusive-creation checks after selecting a name.
 then a fixed number of frames left the next action outside the settled layout. Wait for the
 background operation to finish and run immediate repaints after scrolling before clicking;
 otherwise a missed click looks like a backend mutation that never completed.
+
+## Standalone browser previews
+
+**Live reload broke an HTML template inside an inline script.** A preview server inserted its
+reload script at the first literal body closing tag, which was inside a JavaScript template.
+The inserted script closing tag terminated the outer script. Escape embedded document/script
+closing tags when bundling, and verify the bundle in the actual preview path. JavaScript-only
+syntax checks cannot detect server-side HTML injection.

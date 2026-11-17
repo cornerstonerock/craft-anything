@@ -891,3 +891,12 @@ syntax checks and exporter success/refusal checks pass. Browser smoke is supplie
 run: Chromium startup was refused by host socket permissions. Live engine integration and a real
 reference-to-build run remain pending; no browser or paid-model success is claimed. No Rust
 changes were made; Cargo checks were unavailable because no Rust toolchain is installed.
+
+### LP1 preview delivery repair
+
+The standalone bundle now escapes embedded script/document closing tags without changing runtime
+strings. A live-reload server previously inserted its script inside the embedded concept template,
+terminating the studio script and rendering its remaining source as text. Six headless tests now
+pass. Browser verification through the managed preview confirmed sample generation, local saving,
+mobile preview selection and invalidation after editing. An owner-private static copy was published
+through Sites. The live engine bridge remains pending.
