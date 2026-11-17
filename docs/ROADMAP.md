@@ -3173,8 +3173,8 @@ Looked at and not committed to; none of this is open work. Say in the issue if y
 ## Fork work authorized by the repository owner
 
 ### LP1 Lead Pleaser prototype studio
-Owner: maintainers · Status: in progress
+Owner: maintainers · Status: first slice complete; live integration pending
 User-authorized fork work, independent of the upstream milestone ordering.
-- [ ] Build a standalone brief and concept-preview workbench with a headless module and explicit CLI handoff — claimed: Codex, branch feature/lead-pleaser-prototype-studio
+- [x] Build a standalone brief and concept-preview workbench with a headless module and explicit CLI handoff — claimed: Codex, branch feature/lead-pleaser-prototype-studio
 - [ ] Add a native engine adapter for starting and polling builds, then verify one live paid-model build before enabling a Generate action
 - [ ] Add private hosting, authentication, GHL delivery and cost tracking after the internal pilot

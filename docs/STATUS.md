@@ -880,3 +880,14 @@ NUL terminator inside its declared bytes. Invalid names remain unknown instead o
 false entrypoint or syscall identities. Five synthetic regression tests exercise oversized
 offsets, malformed strides, missing padding, broken string-table links and incomplete names;
 all five fail against the unchanged parser. No Solana program was deployed or executed.
+
+## Lead Pleaser fork studio (LP1)
+
+`examples/lead-pleaser-studio/` adds an original standalone browser workbench and a shared headless
+JavaScript pack builder. It prepares template concepts and an explicit Craft Anything CLI handoff;
+it does not fetch references, start AI builds, publish previews or send leads. Versioned project
+import/export and optional browser-local storage are included. Five headless tests, JavaScript
+syntax checks and exporter success/refusal checks pass. Browser smoke is supplied but could not
+run: Chromium startup was refused by host socket permissions. Live engine integration and a real
+reference-to-build run remain pending; no browser or paid-model success is claimed. No Rust
+changes were made; Cargo checks were unavailable because no Rust toolchain is installed.
