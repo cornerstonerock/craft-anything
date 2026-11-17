@@ -1,0 +1,16 @@
+{
+  "name": "wp-operations-mcp",
+  "version": "0.1.0",
+  "scripts": {
+    "start": "node server.mjs",
+    "test": "node --test test.mjs"
+  },
+  "type": "module",
+  "private": true,
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.32.2",
+    "express": "^5.3.0",
+    "jose": "^6.2.17",
+    "zod": "^3.25.76"
+  }
+}
