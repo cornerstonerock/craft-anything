@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WP Operations</title>
+<style>
+:root {
+  color-scheme: light;
+  font-family: system-ui, sans-serif;
+  background: #f1f4f7;
+  color: #172537;
+  --line: #d5dee7;
+  --ink: #172537;
+  --muted: #4f6172;
+  --teal: #075b52;
+}
+* { box-sizing: border-box; }
+body { margin: 0; }
+.top {
+  display: flex; gap: 1rem; align-items: center; justify-content: space-between;
+  min-height: 4.25rem; padding: .8rem max(1.25rem, calc((100vw - 1320px)/2));
+  background: #112236; color: #f8fbff;
+}
+.brand { display: flex; align-items: center; gap: .65rem; }
+.mark { display: grid; place-items: center; height: 2rem; width: 2rem; border-radius: .55rem; background: #b6f5d9; color: #152e2d; font-weight: 900; }
+.environment { font-size: .83rem; color: #c2d3e3; }
+main { max-width: 1360px; margin: auto; padding: 2rem 1.25rem 4rem; }
+.intro, .panel-head { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+.intro { margin-bottom: 1.35rem; }
+h1 { font-size: clamp(1.9rem, 5vw, 2.65rem); line-height: 1.08; letter-spacing: -.05em; margin: 0; }
+h2 { margin: 0; font-size: 1.13rem; }
+.intro p, .export p { margin: .5rem 0 0; color: var(--muted); overflow-wrap: anywhere; }
+.workbench { display: grid; grid-template-columns: minmax(17rem, 23rem) minmax(0, 1fr); gap: 1rem; align-items: start; }
+.review { display: grid; gap: 1rem; min-width: 0; }
+.panel { background: white; border: 1px solid var(--line); border-radius: .85rem; overflow: hidden; }
+.editor, .export, .panel-head { padding: 1rem 1.2rem; }
+#fields { display: grid; gap: .75rem; margin: 1rem 0; }
+label:not(.file) { display: grid; gap: .3rem; font-size: .82rem; font-weight: 650; }
+input:not([type=file]), textarea {
+  width: 100%; border: 1px solid #aabac9; border-radius: .4rem; padding: .55rem .65rem;
+  font: inherit; font-weight: normal; color: var(--ink); background: #fbfcfe;
+}
+textarea { resize: vertical; min-height: 3.8rem; }
+button, .file {
+  padding: .52rem .75rem; min-height: 2.25rem; border: 1px solid #aabac9; border-radius: .45rem;
+  display: inline-flex; align-items: center; background: white; color: var(--ink); cursor: pointer;
+  font: inherit; font-size: .82rem; font-weight: 650;
+}
+button:hover:not(:disabled), .file:hover { background: #e7f1f1; }
+button:disabled { opacity: .52; cursor: default; }
+button.primary, button[aria-pressed=true] { background: var(--teal); color: white; border-color: var(--teal); }
+button.primary:hover, button[aria-pressed=true]:hover { background: #06473f; }
+:focus-visible, .file:has(+ input:focus-visible) { outline: 3px solid #188d77; outline-offset: 2px; }
+.switch, .actions { display: flex; flex-wrap: wrap; gap: .45rem; }
+.actions { margin-top: 1rem; }
+.canvas { padding: clamp(.65rem, 3vw, 1.6rem); background: #e7edf3; border-top: 1px solid var(--line); }
+#page { max-width: 100%; min-height: 24rem; margin: auto; background: #fffbf0; color: #263c34; border-radius: .65rem; overflow: hidden; box-shadow: 0 3px 14px #15283b15; overflow-wrap: anywhere; }
+#page.mobile { max-width: 390px; }
+.page-title { margin: 0; padding: 1rem 1.2rem; border-bottom: 1px solid #dfdace; font-weight: 650; }
+.page-body { padding: clamp(1rem, 4vw, 3rem); }
+.page-body h2 { font: 700 clamp(1.8rem, 5vw, 3.6rem)/1.03 Georgia, serif; letter-spacing: -.04em; max-width: 16ch; }
+.page-body h3 { margin: 1.7rem 0 .35rem; }
+.page-body p { line-height: 1.55; max-width: 60ch; }
+.wp-block-button__link { display: inline-block; background: #285748; color: white; text-decoration: none; border-radius: .35rem; padding: .7rem .95rem; }
+.empty { padding: 2rem 1rem; text-align: center; color: #4e6159; }
+#status:empty { display: none; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; clip-path: inset(50%); overflow: hidden; }
+@media (max-width: 740px) { .workbench { grid-template-columns: 1fr; } }
+@media (max-width: 370px) { .panel-head { align-items: flex-start; flex-direction: column; } }
+</style>
+<script type="module">
+const fields = {
+  title: ['Page title', 70],
+  audience: ['Audience', 160],
+  headline: ['Headline', 100],
+  summary: ['Intro', 280],
+  section: ['Section heading', 90],
+  body: ['Section copy', 1600],
+  action: ['Button label', 45],
+  destination: ['Button HTTPS URL', 500],
+  description: ['Search description', 160],
+};
+
+const sample = {
+  version: 1,
+  title: 'Spring garden consultations',
+  audience: 'Homeowners planning a garden refresh this spring',
+  headline: 'Make room for a garden you love',
+  summary: 'Start with a one-on-one garden consultation and leave with a clear plan for the season ahead.',
+  section: 'What we cover together',
+  body: 'We walk through your space, talk about sunlight and soil, and prioritize the changes that will make a difference this season.',
+  action: 'Request a consultation',
+  destination: 'https://example.com/consultations',
+  description: 'Plan a spring garden refresh with a one-on-one consultation covering plant selection, layout and seasonal priorities.',
+};
+
+function normalize(input) {
+  if (input?.version !== 1) throw new Error('Use a version 1 WP Operations project.');
+  const project = {version: 1};
+  for (const [key, [label, limit]] of Object.entries(fields)) {
+    const value = typeof input[key] === 'string' ? input[key].trim().replace(/\s+/gu, ' ') : '';
+    if (!value || value.length > limit || /[\x00-\x08\x0e-\x1f\x7f]/u.test(value)) {
+      throw new Error(`${label} needs 1–${limit} characters.`);
+    }
+    project[key] = value;
+  }
+  let destination;
+  try {
+    destination = new URL(project.destination);
+  } catch {
+    throw new Error('Enter a valid HTTPS button URL.');
+  }
+  if (destination.protocol !== 'https:' || destination.username || destination.password) {
+    throw new Error('Enter an HTTPS button URL without credentials.');
+  }
+  project.destination = destination.href;
+  if (project.destination.length > fields.destination[1]) throw new Error('The button URL is too long.');
+  return project;
+}
+
+function escapeHtml(text) {
+  return text.replace(/[&<>"']/g, value => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
+  })[value]);
+}
+
+function blocks(input) {
+  const p = normalize(input);
+  const e = escapeHtml;
+  return [
+    '<!-- wp:heading -->',
+    `<h2 class="wp-block-heading">${e(p.headline)}</h2>`,
+    '<!-- /wp:heading -->',
+    '<!-- wp:paragraph -->',
+    `<p>${e(p.summary)}</p>`,
+    '<!-- /wp:paragraph -->',
+    '<!-- wp:heading {"level":3} -->',
+    `<h3 class="wp-block-heading">${e(p.section)}</h3>`,
+    '<!-- /wp:heading -->',
+    '<!-- wp:paragraph -->',
+    `<p>${e(p.body)}</p>`,
+    '<!-- /wp:paragraph -->',
+    '<!-- wp:buttons -->',
+    '<div class="wp-block-buttons"><!-- wp:button -->',
+    `<div class="wp-block-button"><a class="wp-block-button__link wp-element-button" href="${e(p.destination)}">${e(p.action)}</a></div>`,
+    '<!-- /wp:button --></div>',
+    '<!-- /wp:buttons -->',
+  ].join('\n');
+}
+
+function craftBrief(input) {
+  const p = normalize(input);
+  const format = Object.entries(fields).map(([key, [label, cap]]) => `- ${key}: ${label}, up to ${cap} characters`).join('\n');
+  return `Create one original WordPress campaign page draft. Save it as wp-operations-project.json.\n`
+    + `Use a JSON object with version: 1 and these plain-text fields.\n${format}\n`
+    + 'Keep the HTTPS destination exact, avoid inventing proof or claims, and use the supplied copy as source material.\n'
+    + `Draft data follows.\n${JSON.stringify(p, null, 2)}\n`;
+}
+
+
+const byId = id => document.getElementById(id);
+const form = byId('brief');
+const page = byId('page');
+const details = byId('details');
+const status = byId('status');
+const exportIds = ['project', 'blocks', 'craft'];
+let reviewed;
+
+for (const [key, [label, limit]] of Object.entries(fields)) {
+  const wrapper = document.createElement('label');
+  const control = document.createElement(['summary', 'body', 'description'].includes(key) ? 'textarea' : 'input');
+  control.name = key;
+  control.maxLength = limit;
+  control.required = true;
+  if (key === 'destination') control.type = 'url';
+  wrapper.append(label, control);
+  byId('fields').append(wrapper);
+}
+
+function setExports(enabled) {
+  for (const id of exportIds) byId(id).disabled = !enabled;
+}
+
+function review(input) {
+  reviewed = normalize(input);
+  page.innerHTML = `<header><p class="page-title">${escapeHtml(reviewed.title)}</p><\/header>`
+    + `<div class="page-body">${blocks(reviewed)}</div>`;
+  page.querySelector('a').addEventListener('click', event => {
+    event.preventDefault();
+    status.textContent = `Button destination: ${reviewed.destination}`;
+  });
+  details.textContent = `Audience: ${reviewed.audience} · Search description: ${reviewed.description.length}/160 characters`;
+  setExports(true);
+  status.textContent = 'Draft ready for export.';
+}
+
+function load(input) {
+  const project = normalize(input);
+  for (const key of Object.keys(fields)) form.elements.namedItem(key).value = project[key];
+  review(project);
+}
+
+function download(name, value, type) {
+  const url = URL.createObjectURL(new Blob([value], {type}));
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = name;
+  link.click();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+form.addEventListener('submit', event => {
+  event.preventDefault();
+  try {
+    review({version: 1, ...Object.fromEntries(new FormData(form))});
+  } catch (error) {
+    status.textContent = error.message;
+  }
+});
+form.addEventListener('input', () => {
+  reviewed = undefined;
+  setExports(false);
+  details.textContent = 'Review your changes before exporting.';
+  page.innerHTML = '<p class="empty">Review your changes to refresh the preview.</p>';
+  status.textContent = '';
+});
+
+byId('sample').addEventListener('click', () => load(sample));
+for (const mode of ['desktop', 'mobile']) {
+  byId(mode).addEventListener('click', () => {
+    page.classList.toggle('mobile', mode === 'mobile');
+    for (const option of ['desktop', 'mobile']) byId(option).setAttribute('aria-pressed', String(option === mode));
+  });
+}
+
+byId('project').addEventListener('click', () => download('wp-operations-project.json', JSON.stringify(reviewed, null, 2), 'application/json'));
+byId('blocks').addEventListener('click', () => download('wordpress-blocks.html', blocks(reviewed), 'text/plain'));
+byId('craft').addEventListener('click', () => download('craft-brief.txt', craftBrief(reviewed), 'text/plain'));
+byId('import').addEventListener('change', async event => {
+  const file = event.target.files[0];
+  if (!file) return;
+  try {
+    if (file.size > 24000) throw new Error('Project files must be smaller than 24 KB.');
+    load(JSON.parse(await file.text()));
+  } catch (error) {
+    status.textContent = `Import failed. ${error.message}`;
+  } finally {
+    event.target.value = '';
+  }
+});
+</script>
+</head>
+<body>
+<header class="top">
+  <div class="brand"><span class="mark" aria-hidden="true">W</span><strong>WP Operations</strong></div>
+  <span class="environment">Local workspace</span>
+</header>
+<main>
+  <section class="intro">
+    <div><h1>Page studio</h1><p>Prepare and review an editable WordPress draft.</p></div>
+    <button type="button" id="sample">Load sample</button>
+  </section>
+  <div class="workbench">
+    <section class="panel editor" aria-labelledby="editor">
+      <h2 id="editor">Page brief</h2>
+      <form id="brief">
+        <div id="fields"></div>
+        <button class="primary" type="submit">Review draft</button>
+      </form>
+    </section>
+    <div class="review">
+      <section class="panel" aria-labelledby="preview">
+        <div class="panel-head">
+          <h2 id="preview">Page preview</h2>
+          <div class="switch" role="group" aria-label="Viewport">
+            <button type="button" id="desktop" aria-pressed="true">Desktop</button>
+            <button type="button" id="mobile" aria-pressed="false">Mobile</button>
+          </div>
+        </div>
+        <div class="canvas"><article id="page"><p class="empty">Review your brief to see the page here.</p></article></div>
+      </section>
+      <section class="panel export" aria-labelledby="export">
+        <h2 id="export">Draft handoff</h2>
+        <p id="details">Review the page before exporting it.</p>
+        <div class="actions">
+          <button type="button" id="project" disabled>Download project</button>
+          <button type="button" id="blocks" disabled>Download Gutenberg blocks</button>
+          <button type="button" id="craft" disabled>Download AI brief</button>
+          <label class="file" for="import">Import project</label>
+          <input class="visually-hidden" type="file" id="import" accept=".json,application/json">
+        </div>
+        <p id="status" role="status"></p>
+      </section>
+    </div>
+  </div>
+</main>
+</body>
+</html>
