@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WP Operations</title>
+<link rel="stylesheet" href="style.css">
+<script type="module" src="ui.mjs"></script>
+</head>
+<body>
+<header class="top">
+  <div class="brand"><span class="mark" aria-hidden="true">W</span><strong>WP Operations</strong></div>
+  <span class="environment">Local workspace</span>
+</header>
+<main>
+  <section class="intro">
+    <div><h1>Page studio</h1><p>Prepare and review an editable WordPress draft.</p></div>
+    <button type="button" id="sample">Load sample</button>
+  </section>
+  <div class="workbench">
+    <section class="panel editor" aria-labelledby="editor">
+      <h2 id="editor">Page brief</h2>
+      <form id="brief">
+        <div id="fields"></div>
+        <button class="primary" type="submit">Review draft</button>
+      </form>
+    </section>
+    <div class="review">
+      <section class="panel" aria-labelledby="preview">
+        <div class="panel-head">
+          <h2 id="preview">Page preview</h2>
+          <div class="switch" role="group" aria-label="Viewport">
+            <button type="button" id="desktop" aria-pressed="true">Desktop</button>
+            <button type="button" id="mobile" aria-pressed="false">Mobile</button>
+          </div>
+        </div>
+        <div class="canvas"><article id="page"><p class="empty">Review your brief to see the page here.</p></article></div>
+      </section>
+      <section class="panel export" aria-labelledby="export">
+        <h2 id="export">Draft handoff</h2>
+        <p id="details">Review the page before exporting it.</p>
+        <div class="actions">
+          <button type="button" id="project" disabled>Download project</button>
+          <button type="button" id="blocks" disabled>Download Gutenberg blocks</button>
+          <button type="button" id="craft" disabled>Download AI brief</button>
+          <label class="file" for="import">Import project</label>
+          <input class="visually-hidden" type="file" id="import" accept=".json,application/json">
+        </div>
+        <p id="status" role="status"></p>
+      </section>
+    </div>
+  </div>
+</main>
+</body>
+</html>

@@ -3195,3 +3195,10 @@ Looked at and not committed to; none of this is open work. Say in the issue if y
   adapter for another disassembler (#147)
 - More providers and agents (#14, #63, #97, #162, #170, #186, #206, #470): R2.2's table comes first,
   so each new one is a small addition rather than another half-wired agent
+
+### LP2 WP Operations
+Owner: maintainers · Status: draft workflow implemented; live verification pending
+User-authorized application work based on upstream, independent of milestone ordering.
+- [x] Build an original WordPress draft workflow with browser review, editable block export and explicit staging approval — claimed: Codex, branch feature/wordpress-launch-studio
+- [ ] Verify an authenticated staging site and a signed-in Craft Anything generation run
+- [ ] Add site inventory, role-based approvals and revision-aware updates after the staging pilot

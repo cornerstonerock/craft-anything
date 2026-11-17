@@ -882,3 +882,14 @@ NUL terminator inside its declared bytes. Invalid names remain unknown instead o
 false entrypoint or syscall identities. Five synthetic regression tests exercise oversized
 offsets, malformed strides, missing padding, broken string-table links and incomplete names;
 all five fail against the unchanged parser. No Solana program was deployed or executed.
+
+
+## WP Operations (LP2)
+
+The standalone page studio in `examples/wp-operations` reviews versioned project files and
+exports and imports structured copy for editable Gutenberg blocks. The local staging CLI shows
+the exact request before it accepts approval, binds approval to the configured HTTPS site, and
+can create a WordPress page draft using a revocable application password. Staging is covered
+with a mocked WordPress REST boundary. The Craft Anything engine could start the original brief
+workflow, but its Codex child could not start in the managed workspace. A live WordPress staging
+pilot and completed AI generation are still pending.
