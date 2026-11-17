@@ -3169,3 +3169,12 @@ Looked at and not committed to; none of this is open work. Say in the issue if y
   adapter for another disassembler (#147)
 - More providers and agents (#14, #63, #97, #162, #170, #186, #206, #470): R2.2's table comes first,
   so each new one is a small addition rather than another half-wired agent
+
+## Fork work authorized by the repository owner
+
+### LP1 Lead Pleaser prototype studio
+Owner: maintainers · Status: in progress
+User-authorized fork work, independent of the upstream milestone ordering.
+- [ ] Build a standalone brief and concept-preview workbench with a headless module and explicit CLI handoff — claimed: Codex, branch feature/lead-pleaser-prototype-studio
+- [ ] Add a native engine adapter for starting and polling builds, then verify one live paid-model build before enabling a Generate action
+- [ ] Add private hosting, authentication, GHL delivery and cost tracking after the internal pilot
