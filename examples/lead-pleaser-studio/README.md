@@ -58,12 +58,13 @@ available. Pass the base URL as its first argument. `CHROMIUM_PATH` can select a
 
 ## Validation and current limits
 
-- Five headless tests pass: explicit execution state, escaped preview content, invalid input,
-  terminal quoting and metadata isolation. Exporter success and existing-directory refusal were
+- Six headless tests pass: explicit execution state, escaped preview content, invalid input,
+  terminal quoting, metadata isolation and inline-script protection. Exporter success and existing-directory refusal were
   exercised. All JavaScript source files pass Node syntax checks.
-- Browser smoke is provided but could not run in the development environment: Chromium startup
-  was refused by the host's socket permissions. Layout, actual downloads, storage and focus
-  behavior still require a live browser run; no screenshot evidence is claimed.
+- Browser verification through the managed preview now passes sample generation, the mobile
+  preview toggle, local saving and invalidating a preview after editing its brief. The standalone
+  build protects embedded closing tags so live-reload injection cannot break its script. Full
+  download/import and keyboard coverage remain to be run.
 - No Rust files, engine interfaces or upstream assets were changed. Cargo checks could not run
   because this environment has no Rust toolchain. The referenced sibling craftrules repository
   could not be read because it requires access unavailable to the checkout.
@@ -81,3 +82,8 @@ client data outside this public repository.
 
 This example uses original Lead Pleaser interface work and no upstream brand logos. Upstream
 MIT/Apache notices remain at the repository root. It is a local prototype, not a public service.
+
+Private hosted studio: https://lead-pleaser-prototype-studio.sophronsauna.chatgpt.site/
+
+The hosted copy is owner-private and uses ChatGPT sign-in. Its static source is synced separately
+through Sites; changes in this repository do not automatically republish that copy.
